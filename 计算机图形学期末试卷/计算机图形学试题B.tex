@@ -1,0 +1,134 @@
+\documentclass[12pt,a4paper,UTF8]{ctexart}
+\title{《 计算机图形学》试题B}
+\author{li qiming}
+\date{\today}
+
+\usepackage{textcomp}  %允许\textdegree宏,用于显示特殊符号，如角度360°。
+
+\usepackage{amsmath}  %数学公式
+
+\usepackage{setspace}  %设置行距
+\onehalfspacing  %1.5倍行距
+%\addtolength{\parskip}{.4em} 设置段间距
+
+\usepackage{geometry}  %设置页边距
+\geometry{a4paper,left=3.18cm,right=3.18cm,top=2.54cm,bottom=2.54cm}
+%\geometry{a4paper,scale=0.8}
+
+%\usepackage{indentfirst}  %首行缩进
+%\setlength{\parindent}{2em}  %2字符\indent缩进\noindent不缩进
+
+\usepackage{fancyhdr}  %设置页眉页脚
+\pagestyle{fancy}
+\lhead{\leftmark}  %\leftmark章标题\rightmark节标题
+\chead{}
+\rhead{\today}
+\lfoot{}
+\cfoot{\thepage}
+\rfoot{}
+
+\begin{document}
+	\maketitle
+	\tableofcontents  %插入目录
+	~\\  %插入空行
+	\begin{center}  %居中
+		\par {\bfseries 武汉大学《 计算机图形学》期末考试试题，满分100分}  %加黑
+		\par {\bfseries 简答题共5小题，每题6分，共30分}
+		\par {\bfseries 论述题共5小题，每题8分，共40分}
+		\par {\bfseries 计算题共3小题，每题10分，共30分}
+	\end{center}
+
+	\newpage
+	
+	\section{简答题}
+	\paragraph{1.几何绘制流水线包括哪几个模块}
+	\paragraph{答:}顶点处理，裁剪和图元处理，光栅化，片元处理。
+	\paragraph{2.线性空间(向量空间)、仿射空间及Euclid空间的概念及其区别}
+	\paragraph{答:}线性空间(向量空间)只包含两类对象:标量和向量
+	\par 仿射空间比向量空间增加了一类元素:点
+	\par Euclid空间又增加了距离的概念。
+	\paragraph{3.解释片元的含义}
+	\paragraph{答:}光栅化模块对每个图元输出一组片元(fragment),片元是携带自己信息的潜在像素，携带的信息包括颜色和位置。
+	\paragraph{4.为什么Gouraud着色方法比Phong着色方法效率高}
+	\paragraph{答:}Gouraud着色方法，通过对多边形顶点颜色进行线性插值来获得其内部各点颜色，又称颜色插值着色方法。
+	\par Phong着色方法，通过对多边形顶点的法矢量进行线性插值来获得其内部各点，然后基于法矢量，采用Phong光照明模型进行明暗计算，又称为法向量插值着色方法。
+	\par Gouraud着色方法效率更高，原因是Phong着色方法内部各点需要采用Phong光照明模型进行明暗计算。
+	\paragraph{5.解释OpenGL函数gluLookAt的功能}
+	\paragraph{答:}gluLookAt用来定义观察者(相机)的状态，包括观察者在世界坐标系中所处的位置、看向世界坐标系中的方向(可以理解为眼睛所看向的方向)、观察者头部的朝向(可以在一个平面上360°旋转)。
+	\paragraph{6.以直线为例，写出其显示方程，隐式方程、参数方程}
+	\paragraph{答:}Explicit显式:$y=mx+b$  %行内公式$...$，行间公式\[...\]。
+	\par Implicit隐式:$ax+bx+c=0$
+	\par Parametric参数形式:
+	\par \quad $x(a)=ax0+(1-a)x1$
+	\par \quad $y(a)=ay0+(1-a)y1$
+	
+	\section{论述题}
+	\paragraph{1.请从光线和材质之间的相互作用论述Phong光照模型}
+	\paragraph{参考解答:}(8')
+	\par (2')Phong反射模型考虑了光线和材质之间的相互作用：环境光反射、漫反射、镜面反射。
+	\par (6')光线强度：$I=I_{a}+I_{d}+I_{s}=L_{a}R_{a}+L_{d}R_{d}+L_{s}R_{s}$
+	\par 环境光反射：$I_{a}=k_{a}L_{a}$
+	\par 漫反射：$I_{d}=k_{d}(\boldsymbol l\cdot \boldsymbol n)L_{d}$  %向量箭头表示\vec x粗体表示 \boldsymbol x。
+	\par 镜面反射：$I_{s}=k_{s}L_{s}cos^{\alpha}\phi$
+	\paragraph{2.请描述改进的Phong模型}
+	\paragraph{参考解答:}(8')
+	\par (2')利用半角向量来计算镜面反射分量
+	\[\boldsymbol h=\frac{\boldsymbol l+\boldsymbol v}{\left |\boldsymbol l+\boldsymbol v \right |}\]
+	\par (6')位于观察向量和光源向量这两者正中间，该向量称为半角向量，利用半角向量可以得到镜面反射分量的一个近似。
+	\par 如果把$\boldsymbol r\cdot\boldsymbol v$替换成$\boldsymbol n\cdot\boldsymbol h$，就无须计算$\boldsymbol r$。如果把$(\boldsymbol r\cdot\boldsymbol v)^{e}$中的指数$e$用于计算$(\boldsymbol n\cdot\boldsymbol h)^{e}$，那么镜面反射高光的区域就会变小。为了减小把$\boldsymbol r\cdot\boldsymbol v$替换成$\boldsymbol n\cdot\boldsymbol h$后对明暗计算带来的影响，可以把指数$e$换成另一个指数$e^{'}$，是得$(\boldsymbol n\cdot\boldsymbol h)^{e^{'}}$比$(\boldsymbol n\cdot\boldsymbol h)^{e}$更接近$(\boldsymbol r\cdot\boldsymbol v)^{e}$。
+	\paragraph{3.请举例描述深度缓存消隐算法}
+	\paragraph{参考解答:}(8')
+	\par (4')
+	\par (1)帧缓冲器中的颜色置为背景颜色
+	\par (2)z缓冲器中的z值置成最小值(离视点最远)
+	\par (3)以任意顺序扫描各多边形
+	\par a)对多边形的每一像素，计算其深度值z(x,y)
+	\par b)比较z(x,y)与z缓冲器已有的值zbuffer(x,y)
+	\par 如果z(x,y)$>$zbuffer(x,y)，那么计算该像素(x,y)的光照值属性并写入帧缓冲器，更新z缓冲器zbuffer(x,y)=z(x,y)。
+	\par (4')例...
+	\newpage
+	\paragraph{4.请描述画家算法如何对多边形进行排序消隐处理}
+	\paragraph{参考解答:}(8')
+	\par 深度排序算法(画家算法)：
+	\par (6')
+	\par 1.将场景中的多边形序列按其z坐标的最小值zmin(物体上离视点最远的点)进行排序。
+	\par 2.当物体间的z值范围不重叠时：假设多边形P的zmin在上述排序中最小，如果多边形P的z值范围和Q的z值范围不重叠，即Pzmax$<$Qzmin，此时可以判定多边形P的优先级最低。
+	\par 3.当物体间的z值范围重叠时，判断多边形P是否遮挡场景中多边形Q，需作如下5个判别步骤：
+	\par 1)多边形P和Q的x坐标范围是否不重叠。
+	\par 2)多边形P和Q的y坐标范围是否不重叠。
+	\par 3)从视点看去，多边形P是否完全位于Q的背面
+	\par 4)从视点看去，多边形Q是否完全位于P的同一侧
+	\par 5)多边形P和Q在xy平面上的投影是否不重叠
+	\par 如果上述5种情况中只要有一种成立，就表明多边形P和Q是互不遮挡的，即多边形P的绘制优先级低于Q。
+	\par 如果上述判断都不成立，说明多边形P有可能遮挡Q，此时把多边形P和Q进行互换重新进行判断，而重新判断只要对上述条件(3)和(4)即可。
+	\par (2')
+	\par 4.P和Q交换顺序之后，仍不能判断其优先级顺序，可以按如下方法处理：将其中一个多边形沿另一个物体剖分：
+	\par ·避免循环判断：P做标记
+	\par ·多边形剖分：将P沿Q剖分
+	\par 三维物体的深度排序算法适合于固定视点的消隐。
+	\paragraph{5.走样分为空间阈走样和时间阈走样，请列举光栅图形中主要反走样技术(方法)，并对其中一种进行论述}
+	\paragraph{参考解答:}(8')
+	\par (4')主要反走样技术：
+	\par ·提高屏幕分辨率
+	\par ·预滤波(Pre-filtering)--加权的区域采样
+	\par ·后滤波(Post-filtering)/超采样(Super-Sampling)
+	\par ·时间反走样
+	\par ·半色调(Half-tone)技术等
+	\par 硬件方法：提高分辨率
+	\par 软件方法：计算非加权/加权平均的颜色值
+	\par (4')其中一种进行论述(例：区域平均反走样技术)
+	\par 可以把Bresenham算法看做是一种使用真实像素来近似表示一个像素宽的理想直线光栅化方法。如果观察一个像素宽的理想直线，发现它有一部分覆盖了许多单个像素大小的方形区域。理想的光栅直线通过扫描转换算法，对于斜率小于1的直线上的每个x值，都要精确地选择一个相应的像素值。如果根据像素在理想直线上所占面积的比例来设置像素的亮度，就会得到看起来更平滑的图像，这就是所谓的区域平均反走样技术。
+	
+	\section{计算题}
+	\par 见试题A
+	
+		
+	
+	
+
+
+
+
+
+
+\end{document}
